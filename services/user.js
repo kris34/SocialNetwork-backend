@@ -51,3 +51,10 @@ async function login(email, password) {
 }
 
 async function register() {}
+
+module.exports = {
+  verifyToken,
+  register,
+  login,
+  
+}

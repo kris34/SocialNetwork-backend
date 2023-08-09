@@ -1,18 +1,21 @@
-const express = require('express');
-const app = express();
-const { setCors } = require('./configs/cors');
-const { initMongo } = require('./configs/database');
-const cookieParser = require('cookie-parser');
-const port = '3000';
+const express = require('express')
+const app = express()
+const {setCors} = require('./configs/cors')
+const {initMongo} = require('./configs/database')
+const cookieParser = require('cookie-parser')
+//const session = require('./middleware/session')
+const {authMiddleware} = require('./middleware/session')
+const port = '3000'
 
-start();
+start()
 async function start() {
-  app.use(setCors());
-  await initMongo();
-  app.use(cookieParser());
-  app.use(express.json());
-  app.listen(port, () => {
-    console.log(`Server listening on port ${port}`);
-  });
-}
+  app.use(setCors())
+  await initMongo()
+  app.use(cookieParser())
+  app.use(express.json())
+  app.use(authMiddleware())
 
+  app.listen(port, () => {
+    console.log(`Server listening on port ${port}`)
+  })
+}
