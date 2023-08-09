@@ -14,6 +14,8 @@ const userSchema = new Schema({
     required: true,
     minLength: [5, 'Password has to be at least 5 charakters long.'],
   },
+  friends: { type: [Types.ObjectId], ref: 'User', default: [] },
+  status: { type: [Types.ObjectId], ref: 'Status', default: [] },
 });
 
 userSchema.index(
@@ -25,7 +27,6 @@ userSchema.index(
     },
   }
 );
-
 
 const User = new model('User', userSchema);
 
