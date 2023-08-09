@@ -9,7 +9,7 @@ const userSchema = new Schema({
     maxLength: [15, 'Username cannot be longer then 15 charakters.'],
   },
   email: { type: String, required: true, unique: true },
-  password: {
+  hashedPassword: {
     type: String,
     required: true,
     minLength: [5, 'Password has to be at least 5 charakters long.'],

@@ -1,6 +1,6 @@
 const jwt = require('jsonwebtoken');
 const User = require('../models/User');
-const JWT_SECRET = '2034897yrWZDL';
+const JWT_SECRET = 'p-2-309r8wioeaf';
 const bcrypt = require('bcrypt');
 
 function createToken(data) {
@@ -9,7 +9,7 @@ function createToken(data) {
     email: data.email,
   };
 
-  accessToken = jwt.sign('token', payload);
+  accessToken = jwt.sign(payload, JWT_SECRET);
 
   return {
     _id: payload._id,
@@ -23,7 +23,7 @@ function verifyToken(token) {
 }
 
 async function register(data) {
-  const existingEmail = await User.findOne({email: data.emai});
+  const existingEmail = await User.findOne({email: data.email});
   const existingUsername = await User.findOne({username: data.username});
 
   if (existingEmail) {
@@ -32,25 +32,30 @@ async function register(data) {
     throw new Error('Username is taken.');
   }
 
-  const user = await User.create();
+  const token = {
+    username: data.username,
+    email: data.email,
+    hashedPassword: await bcrypt.hash(data.password, 10),
+  };
+
+  const user = await User.create(token);
+
   return createToken(user);
 }
 
 async function login(email, password) {
-  const user = await User.findOne({email: data.emai});
+  const user = await User.findOne({email});
 
   if (!user) {
     throw new Error('Invalid user.');
   }
 
-  if (await bcrypt.compare(password, user.password)) {
-    return createToken(email, password);
+  if (await bcrypt.compare(password, user.hashedPassword)) {
+    return createToken(user);
   } else {
     throw new Error('Invalid username or password!');
   }
 }
-
-async function register() {}
 
 module.exports = {
   verifyToken,
