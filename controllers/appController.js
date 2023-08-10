@@ -1,9 +1,10 @@
+const { hasUser } = require('../middleware/hasUser');
 const Status = require('../models/Status');
 const {createStatus, deleteStatus} = require('../services/app');
 
 const router = require('express').Router();
 
-router.post('/status/create', async (req, res) => {
+router.post('/status/create', hasUser(), async (req, res) => {
   try {
     const data = Object.assign({_ownerId: req.user._id}, req.body);
     const status = await createStatus(data);
@@ -13,7 +14,7 @@ router.post('/status/create', async (req, res) => {
   }
 });
 
-router.delete('/status/:id/delete', async (req, res) => {
+router.delete('/status/:id/delete', hasUser(), async (req, res) => {
   try {
     const status = await Status.findById(req.params.id);
 
