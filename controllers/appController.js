@@ -18,11 +18,11 @@ router.delete('/status/:id/delete', hasUser(), async (req, res) => {
   try {
     const status = await Status.findById(req.params.id);
 
-    if (status._ownerId == req.user._id) {
-      await deleteStatus(req.params.id);
-    } else {
-      throw new Error('You cannot delete this status.');
+    if (status._ownerId != req.user._id) {
+      throw new Error('You cannot delete this status!');
     }
+
+    await deleteStatus(req.params.id);
 
     res.status(200).json('Deleted');
   } catch (err) {
@@ -32,9 +32,14 @@ router.delete('/status/:id/delete', hasUser(), async (req, res) => {
 
 router.put('/status/:id/edit', hasUser(), async (req, res) => {
   try {
-    const status = await editStatus(req.params.id, req.body.text);
+    const status = await Status.findById(req.params.id);
 
-    res.status(200).json(status);
+    if (status._ownerId != req.user._id) {
+      throw new Error('You cannot edit this status!');
+    }
+
+    const editedStatus = await editStatus(req.params.id, req.body.text);
+    res.status(200).json(editedStatus);
   } catch (err) {
     res.status(400).json({message: err.message});
   }
