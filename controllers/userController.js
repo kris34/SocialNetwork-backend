@@ -1,5 +1,10 @@
 const {hasUser} = require('../middleware/hasUser');
-const {register, login, sendFriendRequest} = require('../services/user');
+const {
+  register,
+  login,
+  sendFriendRequest,
+  acceptFriendRequest,
+} = require('../services/user');
 
 const router = require('express').Router();
 
@@ -36,8 +41,16 @@ router.post('/login', async (req, res) => {
 router.post('/:id/sendFriendRequest', hasUser(), async (req, res) => {
   try {
     const requestSent = await sendFriendRequest(req.user._id, req.params.id);
+    res.status(200).json(requestSent);
+  } catch (err) {
+    res.status(400).json({message: err.message});
+  }
+});
 
-    res.status(200).json(requestSent)
+router.post('/:id/acceptFriendRequest', hasUser(), async (req, res) => {
+  try {
+    const accepted = await acceptFriendRequest(req.user._id, req.params.id);
+    res.status(200).json(accepted);
   } catch (err) {
     res.status(400).json({message: err.message});
   }

@@ -66,9 +66,21 @@ async function sendFriendRequest(userId, friendId) {
   return await friend.save();
 }
 
+async function acceptFriendRequest(userId, friendId) {
+  const user = await User.findById(userId);
+  const friend = await User.findById(friendId);
+
+  friend.friends.push(userId);
+  await friend.save();
+  user.friends.push(friendId);
+  user.friendRequests = user.friendRequests.filter((id) => id != friendId);
+  return user.save();
+}
+
 module.exports = {
   verifyToken,
   register,
   login,
-  sendFriendRequest
+  sendFriendRequest,
+  acceptFriendRequest
 };
