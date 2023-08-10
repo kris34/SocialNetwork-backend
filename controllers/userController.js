@@ -4,6 +4,7 @@ const {
   login,
   sendFriendRequest,
   acceptFriendRequest,
+  removeFriend,
 } = require('../services/user');
 
 const router = require('express').Router();
@@ -51,6 +52,15 @@ router.post('/:id/acceptFriendRequest', hasUser(), async (req, res) => {
   try {
     const accepted = await acceptFriendRequest(req.user._id, req.params.id);
     res.status(200).json(accepted);
+  } catch (err) {
+    res.status(400).json({message: err.message});
+  }
+});
+
+router.post('/:id/removeFriend', hasUser(), async (req, res) => {
+  try {
+    const removed = await removeFriend(req.user._id, req.params.id);
+    res.status(200).json(removed);
   } catch (err) {
     res.status(400).json({message: err.message});
   }

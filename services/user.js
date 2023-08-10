@@ -77,10 +77,21 @@ async function acceptFriendRequest(userId, friendId) {
   return user.save();
 }
 
+async function removeFriend(userId, friendId) {
+  const user = await User.findById(userId);
+  const friend = await User.findById(friendId);
+
+  user.friends = user.friends.filter((id) => id != friendId);
+  await user.save();
+  friend.friends = friend.friends.filter((id) => id != userId);
+  return await friend.save();
+}
+
 module.exports = {
   verifyToken,
   register,
   login,
   sendFriendRequest,
-  acceptFriendRequest
+  acceptFriendRequest,
+  removeFriend,
 };
