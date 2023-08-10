@@ -3,7 +3,6 @@ const app = express();
 const {setCors} = require('./configs/cors');
 const {initMongo} = require('./configs/database');
 const cookieParser = require('cookie-parser');
-//const session = require('./middleware/session')
 const {authMiddleware} = require('./middleware/session');
 const router = require('./routes');
 const port = '3000';
