@@ -57,8 +57,18 @@ async function login(email, password) {
   }
 }
 
+async function sendFriendRequest(userId, friendId) {
+  const user = await User.findById(userId);
+  const friend = await User.findById(friendId);
+
+  friend.friendRequests.push(user._id);
+
+  return await friend.save();
+}
+
 module.exports = {
   verifyToken,
   register,
   login,
+  sendFriendRequest
 };

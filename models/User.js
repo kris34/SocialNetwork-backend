@@ -1,4 +1,4 @@
-const { model, Types, Schema } = require('mongoose');
+const {model, Types, Schema} = require('mongoose');
 
 const userSchema = new Schema({
   username: {
@@ -8,17 +8,18 @@ const userSchema = new Schema({
     minLength: [3, 'Username has to be at least 3 chararakter long!'],
     maxLength: [15, 'Username cannot be longer then 15 charakters.'],
   },
-  email: { type: String, required: true, unique: true },
+  email: {type: String, required: true, unique: true},
   hashedPassword: {
     type: String,
     required: true,
     minLength: [5, 'Password has to be at least 5 charakters long.'],
   },
-  friends: { type: [Types.ObjectId], ref: 'User', default: [] },
+  friendRequests: {type: [Types.ObjectId], ref: 'User', default: []},
+  friends: {type: [Types.ObjectId], ref: 'User', default: []},
 });
 
 userSchema.index(
-  { username: 1 },
+  {username: 1},
   {
     collation: {
       locale: 'en',
