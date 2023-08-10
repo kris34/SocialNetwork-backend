@@ -1,6 +1,6 @@
-const { hasUser } = require('../middleware/hasUser');
+const {hasUser} = require('../middleware/hasUser');
 const Status = require('../models/Status');
-const {createStatus, deleteStatus} = require('../services/app');
+const {createStatus, deleteStatus, editStatus} = require('../services/app');
 
 const router = require('express').Router();
 
@@ -30,6 +30,14 @@ router.delete('/status/:id/delete', hasUser(), async (req, res) => {
   }
 });
 
+router.put('/status/:id/edit', hasUser(), async (req, res) => {
+  try {
+    const status = await editStatus(req.params.id, req.body.text);
 
+    res.status(200).json(status);
+  } catch (err) {
+    res.status(400).json({message: err.message});
+  }
+});
 
 module.exports = router;
