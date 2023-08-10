@@ -1,12 +1,12 @@
 const router = require('express').Router();
 const userController = require('./controllers/userController');
-const siteController = require('./controllers/siteController');
+const appController = require('./controllers/appController');
 
 router.get('/', (req, res) => {
   res.json('Working pro0perly...');
 });
 
-//router.use('/site', siteController);
+router.use('/app', appController);
 router.use('/user', userController);
 
 module.exports = router;
