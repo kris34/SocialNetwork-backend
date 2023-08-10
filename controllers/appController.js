@@ -1,4 +1,4 @@
-const {createStatus} = require('../services/app');
+const {createStatus, deleteStatus} = require('../services/app');
 
 const router = require('express').Router();
 
@@ -12,6 +12,14 @@ router.post('/status/create', async (req, res) => {
   }
 });
 
-
+router.delete('/status/:id/delete', async (req, res) => {
+  try {
+    await deleteStatus(req.params.id);
+    
+    res.status(200).json('Deleted');
+  } catch (err) {
+    res.status(400).json({error: err.message});
+  }
+});
 
 module.exports = router;
