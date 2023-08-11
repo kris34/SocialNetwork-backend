@@ -5,7 +5,11 @@ const commentSchema = new Schema({
     type: String,
     maxLength: [100, 'Comment cannot exceed 100 charakters!'],
   },
-  ownerId: {type: [Types.ObjectId], ref: 'User', required: true},
-  postId: {type: Schema.Types.ObjectId, ref: 'docModel', required: true},
-  docModel: {type: String, required: true, enum: ['Status']},
+  _ownerId: {type: Types.ObjectId, ref: 'User', required: true},
+  docId: {type: Schema.Types.ObjectId, ref: '_docModel', required: true},
+  _docModel: {type: String, required: true, enum: ['Status']},
 });
+
+const Comment = new model("Comment", commentSchema);
+
+module.exports = Comment

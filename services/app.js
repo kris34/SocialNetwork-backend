@@ -1,4 +1,5 @@
 const Status = require('../models/Status');
+const Comment = require('../models/comment');
 
 async function createStatus(data) {
   return await Status.create(data);
@@ -14,12 +15,14 @@ async function editStatus(id, text) {
   return await status.save();
 }
 
-async function comment(postId){ 
-
+async function postComment(data) {
+  return await Comment.create(data);
 }
+
 
 module.exports = {
   createStatus,
   deleteStatus,
   editStatus,
+  postComment,
 };
