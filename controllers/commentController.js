@@ -1,5 +1,5 @@
 const {hasUser} = require('../middleware/hasUser');
-const Status = require('../models/Status');
+const { postComment } = require('../services/app');
 
 const router = require('express').Router();
 

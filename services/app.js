@@ -19,10 +19,17 @@ async function postComment(data) {
   return await Comment.create(data);
 }
 
+async function getUserComments(userId) {
+  const comments = await Comment.find({});
+  const userComments = await comments.filter((c) => c._ownerId == userId);
+
+  return userComments;
+}
 
 module.exports = {
   createStatus,
   deleteStatus,
   editStatus,
   postComment,
+  getUserComments
 };

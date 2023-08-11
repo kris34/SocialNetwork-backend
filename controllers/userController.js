@@ -1,4 +1,5 @@
 const {hasUser} = require('../middleware/hasUser');
+const {getUserComments} = require('../services/app');
 const {
   register,
   login,
@@ -61,6 +62,17 @@ router.post('/:id/removeFriend', hasUser(), async (req, res) => {
   try {
     const removed = await removeFriend(req.user._id, req.params.id);
     res.status(200).json(removed);
+  } catch (err) {
+    res.status(400).json({message: err.message});
+  }
+});
+
+router.get('/:id/comments', async (req, res) => {
+  try {
+    console.log('here');
+    const comments = await getUserComments(req.params.id);
+
+    res.status(200).json(comments);
   } catch (err) {
     res.status(400).json({message: err.message});
   }
