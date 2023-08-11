@@ -14,6 +14,10 @@ async function editStatus(id, text) {
   return await status.save();
 }
 
+async function comment(postId){ 
+
+}
+
 module.exports = {
   createStatus,
   deleteStatus,
