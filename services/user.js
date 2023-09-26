@@ -13,7 +13,7 @@ function createToken(data) {
 
   return {
     _id: payload._id,
-    emai: payload.email,
+    email: payload.email,
     accessToken: accessToken,
   };
 }
@@ -33,12 +33,14 @@ async function register(data) {
   }
 
   const token = {
-    username: data.username,
-    email: data.email,
-    hashedPassword: await bcrypt.hash(data.password, 10),
+    user: {
+      username: data.username,
+      email: data.email,
+      hashedPassword: await bcrypt.hash(data.password, 10),
+    },
   };
 
-  const user = await User.create(token);
+  const user = await User.create(token.user);
 
   return createToken(user);
 }
@@ -87,11 +89,17 @@ async function removeFriend(userId, friendId) {
   return await friend.save();
 }
 
+ function getUser() {
+  const user = localStorage.getItem('accessToken');
+  return user;
+}
+
 module.exports = {
   verifyToken,
   register,
   login,
   sendFriendRequest,
   acceptFriendRequest,
+  getUser,
   removeFriend,
 };

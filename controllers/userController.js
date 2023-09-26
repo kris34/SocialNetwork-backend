@@ -1,12 +1,18 @@
 const {hasUser} = require('../middleware/hasUser');
 const {getUserComments} = require('../services/app');
+const JWT_SECRET = 'p-2-309r8wioeaf';
+const jwt = require('jsonwebtoken');
+
 const {
   register,
   login,
   sendFriendRequest,
   acceptFriendRequest,
   removeFriend,
+  getUser,
 } = require('../services/user');
+const User = require('../models/User');
+const Status = require('../models/Status');
 
 const router = require('express').Router();
 
@@ -23,20 +29,43 @@ router.post('/register', async (req, res) => {
     };
 
     const user = await register(data);
-
+    console.log(user);
     res.status(200).json(user);
   } catch (err) {
-    res.status(400).json({error: err.message});
+    res.status(400).json([err.message]);
   }
 });
 
 router.post('/login', async (req, res) => {
   try {
     const user = await login(req.body.email, req.body.password);
+    const findUser = await User.findById(user._id);
+    const token = {
+      _id: user._id,
+      username: findUser.username,
+      email: findUser.email,
+      accessToken: user.accessToken,
+    };
+    res.status(200).json(token);
+  } catch (err) {
+    res.status(400).json([err.message]);
+  }
+});
 
+router.get('/get', async (req, res) => {
+  try {
+    const token = req.user;
+
+    const findUser = await User.findById(token._id);
+    const user = {
+      _id: token._id,
+      username: findUser.username,
+      email: token.email,
+      accessToken: req.token,
+    };
     res.status(200).json(user);
   } catch (err) {
-    res.status(400).json({error: err.message});
+    res.status(400).json([err.message]);
   }
 });
 
@@ -75,6 +104,26 @@ router.get('/:id/comments', async (req, res) => {
     res.status(200).json(comments);
   } catch (err) {
     res.status(400).json({message: err.message});
+  }
+});
+
+router.get('/feed', async (req, res) => {
+  try {
+    const user = await User.findById(token._id);
+    const allStatus = await Status.find({});
+    const result = [];
+
+    for (let status of allStatus) {
+      for (let friend of user.friends) {
+        if (status._ownerId.toString() == friend._id.toString()) {
+          result.push(status);
+        }
+      }
+    }
+
+    res.status(200).json(result);
+  } catch (err) {
+    res.status(400).json([err.message]);
   }
 });
 
