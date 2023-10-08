@@ -1,6 +1,11 @@
 const {hasUser} = require('../middleware/hasUser');
 const Status = require('../models/Status');
-const {createStatus, deleteStatus, editStatus} = require('../services/app');
+const {
+  createStatus,
+  deleteStatus,
+  editStatus,
+  likeStatus,
+} = require('../services/app');
 
 const router = require('express').Router();
 
@@ -45,6 +50,14 @@ router.put('/status/:id/edit', hasUser(), async (req, res) => {
   }
 });
 
+router.post('/status/like', async (req, res) => {
+  try {
+    const liked = await likeStatus(req.user._id, req.params._id);
 
+    res.status(200).json(liked);
+  } catch (err) {
+    res.status(400).json({message: err.message});
+  }
+});
 
 module.exports = router;

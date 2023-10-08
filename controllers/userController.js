@@ -29,7 +29,6 @@ router.post('/register', async (req, res) => {
     };
 
     const user = await register(data);
-    console.log(user);
     res.status(200).json(user);
   } catch (err) {
     res.status(400).json([err.message]);
@@ -98,7 +97,6 @@ router.post('/:id/removeFriend', hasUser(), async (req, res) => {
 
 router.get('/:id/comments', async (req, res) => {
   try {
-    console.log('here');
     const comments = await getUserComments(req.params.id);
 
     res.status(200).json(comments);
@@ -109,18 +107,27 @@ router.get('/:id/comments', async (req, res) => {
 
 router.get('/feed', async (req, res) => {
   try {
-    const user = await User.findById(token._id);
+    const user = await User.findById(req.user._id);
     const allStatus = await Status.find({});
-    const result = [];
+    const statuses = [];
 
     for (let status of allStatus) {
       for (let friend of user.friends) {
         if (status._ownerId.toString() == friend._id.toString()) {
-          result.push(status);
+          const user = await User.findById(status._ownerId);
+          let newStatus = {
+            username: user.username,
+            _id: status._id,
+            text: status.text,
+          };
+          statuses.push(newStatus);
         }
       }
     }
 
+    const result = {
+      feed: statuses,
+    };
     res.status(200).json(result);
   } catch (err) {
     res.status(400).json([err.message]);

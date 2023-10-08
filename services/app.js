@@ -26,10 +26,34 @@ async function getUserComments(userId) {
   return userComments;
 }
 
+async function likeStatus(userId, statusId) {
+  const status = await Status.findById(statusId);
+
+  if (status.likes.includes(userId)) {
+    throw new Error('Status already liked!');
+  }
+
+  this.status.likes.push(userId);
+  await status.save();
+  return status;
+}
+
+async function unlikeStatus(userId, statusId) {
+  const status = await Status.findById(statusId);
+
+  this.status.likes = this.status.likes.filter((id) => id != userId);
+
+  this.status.save();
+
+  return status;
+}
+
 module.exports = {
   createStatus,
   deleteStatus,
   editStatus,
+  unlikeStatus,
   postComment,
-  getUserComments
+  getUserComments,
+  likeStatus,
 };
