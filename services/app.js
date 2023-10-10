@@ -33,7 +33,7 @@ async function likeStatus(userId, statusId) {
     throw new Error('Status already liked!');
   }
 
-  this.status.likes.push(userId);
+  status.likes.push(userId);
   await status.save();
   return status;
 }
@@ -41,9 +41,9 @@ async function likeStatus(userId, statusId) {
 async function unlikeStatus(userId, statusId) {
   const status = await Status.findById(statusId);
 
-  this.status.likes = this.status.likes.filter((id) => id != userId);
+  status.likes = status.likes.filter((id) => id != userId);
 
-  this.status.save();
+  await status.save();
 
   return status;
 }

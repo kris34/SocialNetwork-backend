@@ -5,6 +5,7 @@ const {
   deleteStatus,
   editStatus,
   likeStatus,
+  unlikeStatus,
 } = require('../services/app');
 
 const router = require('express').Router();
@@ -50,14 +51,26 @@ router.put('/status/:id/edit', hasUser(), async (req, res) => {
   }
 });
 
-router.post('/status/like', async (req, res) => {
+router.post('/status/:id/like', async (req, res) => {
   try {
-    const liked = await likeStatus(req.user._id, req.params._id);
-
+    const liked = await likeStatus(req.user._id, req.params.id);
+    
     res.status(200).json(liked);
   } catch (err) {
     res.status(400).json({message: err.message});
   }
 });
+
+
+router.post('/status/:id/dislike', async (req, res) => {
+  try {
+    const liked = await unlikeStatus(req.user._id, req.params.id);
+    
+    res.status(200).json(liked);
+  } catch (err) {
+    res.status(400).json({message: err.message});
+  }
+});
+
 
 module.exports = router;
