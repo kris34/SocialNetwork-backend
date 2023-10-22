@@ -54,23 +54,21 @@ router.put('/status/:id/edit', hasUser(), async (req, res) => {
 router.post('/status/:id/like', async (req, res) => {
   try {
     const liked = await likeStatus(req.user._id, req.params.id);
-    
+    console.log('liked');
     res.status(200).json(liked);
   } catch (err) {
     res.status(400).json({message: err.message});
   }
 });
-
 
 router.post('/status/:id/dislike', async (req, res) => {
   try {
     const liked = await unlikeStatus(req.user._id, req.params.id);
-    
+    console.log("disliked");
     res.status(200).json(liked);
   } catch (err) {
     res.status(400).json({message: err.message});
   }
 });
-
 
 module.exports = router;

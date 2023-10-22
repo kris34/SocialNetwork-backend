@@ -7,6 +7,7 @@ function createToken(data) {
   const payload = {
     _id: data._id,
     email: data.email,
+    username: data.username,
   };
 
   accessToken = jwt.sign(payload, JWT_SECRET);
@@ -15,6 +16,7 @@ function createToken(data) {
     _id: payload._id,
     email: payload.email,
     accessToken: accessToken,
+    username: data.username,
   };
 }
 
@@ -89,7 +91,7 @@ async function removeFriend(userId, friendId) {
   return await friend.save();
 }
 
- function getUser() {
+function getUser() {
   const user = localStorage.getItem('accessToken');
   return user;
 }

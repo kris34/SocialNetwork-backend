@@ -27,7 +27,7 @@ router.post('/register', async (req, res) => {
       email: req.body.email,
       password: req.body.password,
     };
-
+    
     const user = await register(data);
     res.status(200).json(user);
   } catch (err) {
@@ -118,7 +118,10 @@ router.get('/feed', async (req, res) => {
           let newStatus = {
             username: user.username,
             _id: status._id,
+            likes: status.likes,
+            color: status.color,
             text: status.text,
+            likesCount: status.likesCount,
           };
           statuses.push(newStatus);
         }

@@ -29,11 +29,10 @@ async function getUserComments(userId) {
 async function likeStatus(userId, statusId) {
   const status = await Status.findById(statusId);
 
-  if (status.likes.includes(userId)) {
-    throw new Error('Status already liked!');
-  }
-
   status.likes.push(userId);
+  status.color = 'pink';
+  status.likesCount = status.likes.length;
+  // status.isLiked = true;
   await status.save();
   return status;
 }
@@ -42,7 +41,10 @@ async function unlikeStatus(userId, statusId) {
   const status = await Status.findById(statusId);
 
   status.likes = status.likes.filter((id) => id != userId);
+  status.color = 'white';
 
+  status.likesCount = status.likes.length;
+  //status.isLiked = false;
   await status.save();
 
   return status;
